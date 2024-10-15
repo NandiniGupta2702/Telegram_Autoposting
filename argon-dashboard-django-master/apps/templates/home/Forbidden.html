@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Forbidden {% endblock title %}
+
+{% block content %}
+  <div class="header bg-danger pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Forbidden</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card bg-danger text-white shadow">
+        <div class="card-body text-center">
+          <h3>You are not authorized to view this page.</h3>
+          <p>Please contact your administrator if you believe this is a mistake.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+{% endblock content %}

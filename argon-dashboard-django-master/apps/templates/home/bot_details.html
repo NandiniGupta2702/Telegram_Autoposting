@@ -1,0 +1,203 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Bot Details{% endblock title%}
+
+{% block content %}
+  <!-- Page Header -->
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">Bot Details</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Bot Details</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Details</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+<div class="container-fluid mt--6">
+  <div class="row">
+    <!-- User Information Card -->
+    <div class="col-xl-6 col-lg-6 mb-4 d-flex">
+      <div class="card shadow w-100">
+        <div class="card-header bg-gradient-info text-white">
+          <h4 class="mb-0">User Information</h4>
+        </div>
+        <div class="card-body">
+          {% if user %}
+          <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+          <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+          <li class="list-group-item"><strong>Date Joined:</strong> {{ user.date_joined }}</li>
+          {% else %}
+          <p>No user information available.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if bot %}
+    <!-- CSV Upload Card -->
+    <div class="col-xl-6 col-lg-6 mb-4 d-flex">
+      <div class="card shadow w-100">
+        <div class="card-header bg-gradient-primary text-white">
+          <h4 class="mb-0">Add Users</h4>
+        </div>
+        <div class="card-body">
+          {% if success_message %}
+          <div class="alert alert-success" role="alert">
+            {{ success_message }}
+          </div>
+          {% endif %}
+          {% if error_message %}
+          <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+          </div>
+          {% endif %}
+          <div class="form-group d-flex align-items-center mb-2">
+            <label for="csv_format_example" class="mr-2">Please check the CSV format:</label>
+            <!-- Button to view CSV format image -->
+            <a href="{% static 'assets/img/theme/format.png' %}" target="_blank" class="btn btn-info btn-sm">
+              View CSV Format
+            </a>
+          </div>
+          <form method="post" enctype="multipart/form-data" action="{% url 'run_csv' bot.id %}" id="csv-upload-form">
+            <input type="hidden" name="source_page" value="bot_details"> <!-- Ensure source page is set correctly -->
+            {% csrf_token %}
+            
+            <div class="form-group mb-0">
+              <label for="csv_file">Select CSV File</label>
+              <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".csv">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Run CSV</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    
+
+    <!-- Bot Information Card (Full Width) -->
+    
+      <div class="col-xl-12 col-lg-12 mb-4">
+        <div class="card shadow">
+          <div class="card-header bg-gradient-success text-white">
+            <h4 class="mb-0">Bot Information</h4>
+          </div>
+          <div class="card-body">
+            
+              <form method="post" action="{% url 'bot_details' bot.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="token">Token:</label>
+                  <input type="text" class="form-control" id="token" name="token" value="{{ bot.token }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="api_id">API ID:</label>
+                  <input type="text" class="form-control" id="api_id" name="api_id" value="{{ bot.api_id }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="api_hash">API Hash:</label>
+                  <input type="text" class="form-control" id="api_hash" name="api_hash" value="{{ bot.api_hash }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="group_username">Group Username:</label>
+                  <input type="text" class="form-control" id="group_username" name="group_username" value="{{ bot.group_username }}">
+                </div>
+                <div class="form-group">
+                  <label for="channel_username">Channel Username:</label>
+                  <input type="text" class="form-control" id="channel_username" name="channel_username" value="{{ bot.channel_username }}">
+                </div>
+                <div class="form-group">
+                  <label for="phone_number">Phone Number</label>
+                  <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ bot.phone_number }}">
+                </div>
+                <button type="submit" class="btn bg-gradient-success btn-bloc">Save Changes</button>
+              </form>
+              <div class="card-footer d-flex justify-content-between">
+                <!-- Delete Button -->
+                <form method="post" action="{% url 'delete_bot' bot.id %}" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger" title="Delete Bot">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+                <!-- Run Bot Button -->
+                <form class="run-bot-form d-inline" data-bot-id="{{ bot.id }}" onsubmit="return false;">
+                  {% csrf_token %}
+                  <input type="hidden" name="bot_id" value="{{ bot.id }}">
+                  <button type="button" class="btn btn-primary run-bot-button" id="run-bot-{{ bot.id }}" title="Run Bot">
+                    <i class="fas fa-play"></i> Run
+                  </button>
+                </form>
+              </div>
+            {% else %}
+              <p>No bot data available for this user.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+   
+  </div>
+
+  {% include "includes/footer.html" %}
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const botForms = document.querySelectorAll('.run-bot-form');
+
+  botForms.forEach(form => {
+    const button = form.querySelector('.run-bot-button');
+    const botId = form.dataset.botId;
+
+    button.addEventListener('click', function () {
+      const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+      const action = button.classList.contains('btn-primary') ? 'start' : 'stop';
+
+      fetch(`/run-bot/${botId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ action: action })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          if (action === 'start') {
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success');
+            button.innerHTML = '<i class="fas fa-stop"></i> Bot Running';
+          } else {
+            button.classList.remove('btn-success');
+            button.classList.add('btn-primary');
+            button.innerHTML = '<i class="fas fa-play"></i> Run';
+          }
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error occurred while running the bot.');
+      });
+    });
+  });
+});
+</script>
+{% endblock javascripts %}

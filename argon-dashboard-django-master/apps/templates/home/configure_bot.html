@@ -1,0 +1,94 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Configure Bot {% endblock title %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h6 class="h2 text-white d-inline-block mb-0">Configure Telegram Bot</h6>
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Configure Bot</li>
+            </ol>
+          </nav>
+        </div>
+        <!-- <div class="col-lg-6 col-5 text-right">
+          <a href="#" class="btn btn-sm btn-neutral">New</a>
+          <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div class="container-fluid mt--6">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+      <div class="card border-0">
+        <div class="card-body">
+          <h4 class="mb-4 text-center">Configure Your Telegram Bot</h4>
+
+          <!-- Success message for Run Bot or CSV -->
+          {% if success_message %}
+            <div class="alert alert-success">
+              {{ success_message }}
+            </div>
+          {% endif %}
+          
+          <!-- Form starts here -->
+          <form method="post" enctype="multipart/form-data" action="{% url 'configure_bot' %}">
+            {% csrf_token %}
+            
+            <!-- Dynamically render all form fields -->
+            {{ form.token.label_tag }} {{ form.token }}
+            {{ form.api_id.label_tag }} {{ form.api_id }}
+            {{ form.api_hash.label_tag }} {{ form.api_hash }}
+            {{ form.group_username.label_tag }} {{ form.group_username }}
+            {{ form.channel_username.label_tag }} {{ form.channel_username }}
+
+           
+            <!-- Submit buttons -->
+            <div class="text-center">
+              <button type="submit" name="run_bot" class="btn btn-primary">Save Data</button>
+            </div>
+          
+          <!-- Form ends here -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% include "includes/footer.html" %}
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  function toggleCsvUpload() {
+    const checkbox = document.getElementById('use_csv');
+    const csvUpload = document.getElementById('csv_upload');
+    const runCsvButton = document.getElementById('run_csv_button');
+    
+    if (checkbox.checked) {
+      csvUpload.style.display = 'block';
+      runCsvButton.style.display = 'inline-block';  // Show the "Run CSV" button
+    } else {
+      csvUpload.style.display = 'none';
+      runCsvButton.style.display = 'none';  // Hide the "Run CSV" button
+    }
+  }
+
+  // Call the function initially in case the checkbox is pre-checked
+  toggleCsvUpload();
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,71 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<style>
+    /* Custom styles for the heading and cards */
+    h2 {
+        margin-top: 30px; /* Space from the top */
+        margin-bottom: 30px; /* Space from the bottom */
+        font-family: 'Arial', sans-serif; /* Change font to Arial (or any desired font) */
+    }
+    .card {
+        max-height: 250px; /* Adjust the height of the cards */
+        overflow: auto; /* Add scroll if content overflows */
+    }
+</style>
+
+<div class="container">
+    <h2>Manage API Key</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>API Key Management</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'upload_csv_page' %}">
+                {% csrf_token %}
+                
+                <!-- API Key Input -->
+                <div class="form-group">
+                    <label for="api_key">Enter New API Key</label>
+                    <input type="text" id="api_key" name="api_key" class="form-control">
+                </div>
+
+                <!-- Save API Button -->
+                <button type="submit" name="action" value="save_api" class="btn btn-primary">Save API</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Set Active API Key</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'upload_csv_page' %}">
+                {% csrf_token %}
+                
+                <!-- Dropdown for Previous API Keys -->
+                <div class="form-group">
+                    <label for="previous_apis">Select Previous API Key</label>
+                    <select name="previous_apis" class="form-control">
+                        <option value="">--- Select API Key ---</option>
+                        {% for api in available_apis %}
+                            <option value="{{ api.id }}">{{ api.api_key }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Set API Button -->
+                <button type="submit" name="action" value="set_api" class="btn btn-success">Set API Key</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display Active API Key -->
+    <div class="form-group">
+        <label for="active_api">Active API Key</label>
+        <input type="text" id="active_api" class="form-control" value="{{ active_api }}" readonly>
+    </div>
+</div>
+{% endblock content %}

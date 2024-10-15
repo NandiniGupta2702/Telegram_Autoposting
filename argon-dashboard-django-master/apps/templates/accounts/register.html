@@ -1,0 +1,131 @@
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %} Register {% endblock title %}
+
+{% block stylesheets %}
+  <style>
+    .card-header {
+      padding-bottom: 10px; /* Reduce padding */
+    }
+    .card-body {
+      padding-top: 20px; /* Reduce top padding */
+      padding-bottom: 20px; /* Reduce bottom padding */
+    }
+    .text-muted.mb-4 {
+      margin-bottom: 10px; /* Reduce bottom margin */
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <!-- Table -->
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+        
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-3"> <!-- Adjusted spacing here -->
+              <div class="text-muted text-center mt-2 mb-2"> <!-- Reduced bottom margin -->
+                Sign Up
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-4"> <!-- Reduced padding -->
+              <div class="text-center text-muted mb-3"> <!-- Reduced bottom margin -->
+
+                {% if msg %}
+                  <small>{{ msg | safe }}</small>
+                {% else %}
+                  Add your credentials
+                {% endif %}
+              
+              </div>
+
+              {% if not success %}
+
+                <form method="POST">
+                  {% csrf_token %}
+            
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      {{ form.username }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.username.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      {{ form.email }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.email.errors }}</span>
+                  
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      </div>
+                      {{ form.password1 }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.password1.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      </div>
+                      {{ form.password2 }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.password2.errors }}</span>
+
+                  <div class="row my-3"> <!-- Reduced vertical spacing -->
+                    <div class="col-12">
+                      <div class="custom-control custom-control-alternative custom-checkbox">
+                        <input class="custom-control-input" id="customCheckRegister" type="checkbox" onchange="toggleSubmit()">
+                        <label class="custom-control-label" for="customCheckRegister">
+                          <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-3" id="submitBtn" disabled>Create account</button> <!-- Reduced margin-top -->
+                  </div>
+                </form>
+
+              {% endif %}
+  
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col text-center">
+          <p class="text-muted">Already have an account? <a href="{% url 'login' %}" class="text-light d-block"><small>Login</small></a></p>
+        </div>
+      </div>
+
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  function toggleSubmit() {
+    const checkBox = document.getElementById('customCheckRegister');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    submitBtn.disabled = !checkBox.checked;
+  }
+</script>
+{% endblock javascripts %}

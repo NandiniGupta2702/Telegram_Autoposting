@@ -1,0 +1,60 @@
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+  <div class="scrollbar-inner">
+    <!-- Brand -->
+    <div class="sidenav-header align-items-center" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 120px; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px;">
+      <a class="navbar-brand" href="/">
+        <img src="/static/assets/img/brand/tele.png" style="max-width: 100%; height: auto; max-height: 100px; object-fit: contain;" alt="Logo">
+      </a>
+      <!-- User Name -->
+      
+    </div>
+
+    <div class="navbar-inner" style="margin-top: 20px;"> <!-- Added margin-top for spacing -->
+      {% if request.user.is_superuser %}
+      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/bot-data/' %} active {% endif %}" href="{% url 'user_bot_data' %}" style="font-size: 1rem;">
+              <i class="ni ni-cloud-upload-96 text-primary" style="font-size: 1.5rem;"></i>
+              <span class="nav-link-text">Bot</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/registered-users/' %} active {% endif %}" href="{% url 'user_list' %}" style="font-size: 1rem;">
+              <i class="ni ni-bullet-list-67 text-default" style="font-size: 1.5rem;"></i>
+              <span class="nav-link-text">Users</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/upload_csv/' %} active {% endif %}" href="{% url 'upload_csv_page' %}" style="font-size: 1rem;">
+              <i class="ni ni-bullet-list-67 text-default" style="font-size: 1.5rem;"></i>
+              <span class="nav-link-text">API Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}" style="font-size: 1rem;">
+              <i class="ni ni-user-run text-red" style="font-size: 1.5rem;"></i>
+              <span class="nav-link-text">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/bot-data/' %} active {% endif %}" href="{% url 'user_bot_data' %}" style="font-size: 1rem;">
+            <i class="ni ni-cloud-upload-96 text-primary" style="font-size: 1.5rem;"></i>
+            <span class="nav-link-text">Bot</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}" style="font-size: 1rem;">
+            <i class="ni ni-user-run text-red" style="font-size: 1.5rem;"></i>
+            <span class="nav-link-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
